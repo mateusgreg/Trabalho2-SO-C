@@ -1,0 +1,11 @@
+
+argv[1] = concorrente
+Dimensao da matriz: 800
+
+ENTROU AQUI: Concorrente!
+
+Soma: -319264
+Maior: 49
+Menor: -50
+Tempo de processamento: 1.11225e+06 ms
+

@@ -1,0 +1,7 @@
+
+argv[1] = concorrente
+Dimensao da matriz: 1440
+
+ENTROU AQUI: Concorrente!
+
+--ERRO: pthread_create()

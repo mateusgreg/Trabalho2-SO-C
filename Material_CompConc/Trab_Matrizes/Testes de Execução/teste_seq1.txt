@@ -1,0 +1,11 @@
+
+argv[1] = sequencial
+Dimensao da matriz: 8
+
+ENTROU AQUI: Sequencial!
+
+Soma: 85
+Maior: 49
+Menor: -50
+Tempo de processamento: 2 ms
+
