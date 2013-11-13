@@ -16,3 +16,6 @@
 *.exe
 *.out
 *.app
+
+#  Text editors such as Emacs temporary files mark
+*~
