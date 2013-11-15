@@ -6,6 +6,13 @@ extern int k;
 extern int* PI;
 extern int** matrizGerada;
 
+
+tarefas* divideTarefas(int k, int undExecucao){
+	tarefas* t = (tarefa*)calloc(sizeof(tarefa), undExecucao);
+	
+	return t;
+}
+
 /*
 lembrando que k, PI e matrizGerada sao globais
 */
