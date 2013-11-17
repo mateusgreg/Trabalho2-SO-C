@@ -1,0 +1,4 @@
+
+int getMinimumInt();
+
+int getMaximumInt();

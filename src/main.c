@@ -54,4 +54,6 @@ int main (){
 		printf("%d ", PI[l]);
 	}
 	printf("\n");
+
+	free(resultado);
 }
