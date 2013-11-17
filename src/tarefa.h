@@ -3,9 +3,9 @@
 typedef struct _tarefas {
 	int inicio;
 	int fim;
-}tarefas;
+}Tarefas;
 
-tarefas* divideTarefas(int k, int undExecucao);
+Tarefas* divideTarefas(int k, int undExecucao);
 
 /*
 recebe i, a linha e coluna em cima de onde calcular o PI e referencias para o maior e menor elemento

@@ -8,8 +8,8 @@ extern int* PI;
 extern int** matrizGerada;
 
 
-tarefas* divideTarefas(int k, int undExecucao){
-	tarefas* t = (tarefas*)calloc(sizeof(tarefas), undExecucao);
+Tarefas* divideTarefas(int k, int undExecucao){
+	Tarefas* t = (Tarefas*)calloc(undExecucao, sizeof(Tarefas));
 	
 	return t;
 }
