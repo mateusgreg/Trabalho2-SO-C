@@ -3,22 +3,28 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: Programa responsável por gerar uma matriz quadrada conforme o tamanho informado durante a execução */
+/* Descrição: Módulo Sequencial. Aqui não há divisão de tarefas, a própria thread main é quem realiza todo o processamento da matriz */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include "tarefa.h"
 
-int main(int argc, char* argv[]) {
-  int dim, i, j;
+Resultado* sequencial(int k, int* PI) {
+  
+  /*
+	Tarefas *tarefas = (Tarefas*)malloc(sizeof(Tarefas));
+	tarefas.inicio = 0;
+	tarefas.fim = k-1;
 
-  scanf("%d", &dim);      //le da entrada o numero de quadrantes da matriz
-  printf("%d\n", dim);    //imprime no arquivo de saida a dimensao da matriz, considerando o quadrante de tamanho 8x8
+	return executaTarefa(tarefas);
+  */
 
-  //inicia o gerador de numeros aleatorios
-  srand(time(NULL));
+	int i;
+	int* indices = malloc(k * sizeof(int));
 
+	for (i=0; i<k; i++) {
+		indices[i] = i;
+	}
 
-
-  return 0;
+	return executaTarefa(indices, k);
 }
