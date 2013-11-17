@@ -1,7 +1,7 @@
 all: main
 
-main: main.o tarefa.o subprocessos.o
-	gcc -o main main.o tarefa.o subprocessos.o
+main: main.o tarefa.o subprocessos.o resultado.h
+	gcc -o main main.o tarefa.o subprocessos.o -lpthread -lrt
 
 main.o: main.c
 	gcc -c main.c

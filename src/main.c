@@ -11,32 +11,14 @@ int *PI;
 int main (){
 	//globais variaveis
 	//int* indices = (int*)calloc(sizeof(int), k);
-	float mediaPI;
-	float mediaQuadradoPI;
-	int maiorElem;
-	int menorElem;
-	int maiorPI;
-	int menorPI;
 
 	//subprocessos variaveis
 	int nsubprocessos = 4;
-	float* mediasPI;
-	float* mediasQuadradoPI;
-	int* maioresPI;
-	int* menoresPI;
-	int* maioresElem;
-	int* menoresElem;
+	Resultado* resultado;
 
 	//loop variaveis
 	int l;
 	int j;
-
-	mediasPI = (float*) calloc(sizeof(float), nsubprocessos);
-	mediasQuadradoPI = (float*) calloc(sizeof(float), nsubprocessos);;
-	maioresPI = (int*) calloc(sizeof(int), nsubprocessos);
-	menoresPI = (int*) calloc(sizeof(int), nsubprocessos);
-	maioresElem = (int*) calloc(sizeof(int), nsubprocessos);
-	menoresElem = (int*) calloc(sizeof(int), nsubprocessos);
 
 
 	matrizGerada = (int**)calloc(sizeof(int*), k);
@@ -57,31 +39,15 @@ int main (){
 
 	//executaTarefa(indices, k, &mediaPI, &mediaQuadradoPI, &maiorElem, &menorElem, &maiorPI, &menorPI);
 
-	executaSubprocessos(nsubprocessos, mediasPI, mediasQuadradoPI, maioresPI, menoresPI, maioresElem, menoresElem);
+	resultado = executaSubprocessos(nsubprocessos);
 
-	mediaPI = 0;
-	mediaQuadradoPI = 0;
-	maiorElem = matrizGerada[0][0];
-	menorElem = matrizGerada[0][0];
-	maiorPI = maioresPI[0];
-	menorPI = maioresPI[0];
-
-	for(l = 0; l < nsubprocessos; l++){
-		mediaPI += mediasPI[l];
-		mediaQuadradoPI += mediasQuadradoPI[l];
-		maiorPI = (maiorPI > maioresPI[l]) ? maiorPI : maioresPI[l];
-		menorPI = (menorPI < menoresPI[l]) ? menorPI : menoresPI[l];
-		maiorElem = (maiorElem > maioresElem[l]) ? maiorElem : maioresElem[l];
-		menorElem = (menorElem < menoresElem[l]) ? menorElem : menoresElem[l];
-	}
-
-	printf("mediaPI = %.4f\n", mediaPI);
-	printf("mediaQuadradoPI = %.4f\n", mediaQuadradoPI);
-	printf("menorPI = %d\n", menorPI);
-	printf("maiorPI = %d\n", maiorPI);
-	printf("menorElem = %d\n", menorElem);
-	printf("maiorElem = %d\n", maiorElem);
-	printf("desvio padrao = %.4f\n", (mediaQuadradoPI - mediaPI * mediaPI));
+	printf("mediaPI = %.4f\n",resultado-> mediaPI);
+	printf("mediaQuadradoPI = %.4f\n", resultado->mediaQuadradoPI);
+	printf("menorPI = %d\n", resultado->menorPI);
+	printf("maiorPI = %d\n", resultado->maiorPI);
+	printf("menorElem = %d\n", resultado->menorElem);
+	printf("maiorElem = %d\n", resultado->maiorElem);
+	printf("desvio padrao = %.4f\n", (resultado->mediaQuadradoPI - resultado->mediaPI * resultado->mediaPI));
 
 	printf("PI\n");
 	for(l = 0; l < k; l++){
