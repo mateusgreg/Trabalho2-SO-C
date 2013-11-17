@@ -15,6 +15,7 @@ int main (){
 	//subprocessos variaveis
 	int nsubprocessos = 4;
 	Resultado* resultado;
+	int* PIFinal = (int*)calloc(sizeof(int), k);
 
 	//loop variaveis
 	int l;
@@ -22,7 +23,7 @@ int main (){
 
 
 	matrizGerada = (int**)calloc(sizeof(int*), k);
-	PI = (int*)calloc(sizeof(int), k);
+	//PI = (int*)calloc(sizeof(int), k);
 
 	for(l = 0; l < k; l++){
 		//indices[l] = l;
@@ -39,7 +40,7 @@ int main (){
 
 	//executaTarefa(indices, k, &mediaPI, &mediaQuadradoPI, &maiorElem, &menorElem, &maiorPI, &menorPI);
 
-	resultado = executaSubprocessos(nsubprocessos);
+	resultado = executaSubprocessos(nsubprocessos, k, PIFinal);
 
 	printf("mediaPI = %.4f\n",resultado-> mediaPI);
 	printf("mediaQuadradoPI = %.4f\n", resultado->mediaQuadradoPI);
@@ -49,11 +50,18 @@ int main (){
 	printf("maiorElem = %d\n", resultado->maiorElem);
 	printf("desvio padrao = %.4f\n", (resultado->mediaQuadradoPI - resultado->mediaPI * resultado->mediaPI));
 
-	printf("PI\n");
+	printf("pid=%d, PIFinal\n", getpid());
 	for(l = 0; l < k; l++){
-		printf("%d ", PI[l]);
+		printf("%d ", PIFinal[l]);
 	}
 	printf("\n");
 
 	free(resultado);
+	free(PIFinal);
+
+	for(l = 0; l < k; l++){
+		free(matrizGerada[l]);
+	}
+
+	free(matrizGerada);
 }

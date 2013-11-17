@@ -4,7 +4,7 @@
 que devem ser criados para a execucao da tarefa
 e retorna o resultado calculado pelos subprocessos
 */
-Resultado* executaSubprocessos(int nsubprocessos);
+Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFInal);
 
 
 /*funcao que cada subprocesso vai realmente executar.

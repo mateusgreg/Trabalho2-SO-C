@@ -9,38 +9,62 @@
 #include <semaphore.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
-#define SHARED_NAME "/shared"
+#define SHARED_NAME_RESULTADO "/sharedResultado"
+#define SHARED_NAME_PI "/sharedPI"
 #define SEM_NAME "/semaphore"
 #define SEM_INIT_VALUE 1
 
 Resultado* resultadoFinal;
+int* PI;
 sem_t* semaphore;
 
-Resultado* executaSubprocessos(int nsubprocessos){
+Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
 	int i;
 	int pid;
-	int shmfd;
-	int sharedSegSize = 1 * sizeof(Resultado);
+	int shmfdResultado;
+	int sharedSegSizeResultado = 1 * sizeof(Resultado);
+	int shmfdPI;
+	int sharedSegSizePI = k * sizeof(int);
 	Resultado* resultado = (Resultado*) malloc(sizeof(Resultado));
 
-	shmfd = shm_open(SHARED_NAME, O_CREAT | O_RDWR, 0666);
-	if (shmfd == -1){
-		printf("Erro shm_open aborting...\n");
+	shmfdResultado = shm_open(SHARED_NAME_RESULTADO, O_CREAT | O_RDWR, 0666);
+	if (shmfdResultado == -1){
+		printf("Erro shm_open resultado aborting...\n");
 		exit(-1);
 	}
 
-	if(ftruncate(shmfd, sharedSegSize) == -1){
-		printf("error truncating\n");
+	if(ftruncate(shmfdResultado, sharedSegSizeResultado) == -1){
+		printf("error truncating resultado\n");
 		exit(-1);
 	}
 
-	resultadoFinal = mmap(NULL, sharedSegSize, PROT_READ | PROT_WRITE, MAP_SHARED, shmfd, 0);
+	resultadoFinal = mmap(NULL, sharedSegSizeResultado, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdResultado, 0);
 
 	if(resultadoFinal == MAP_FAILED){
-		printf("error mapping\n");
+		printf("error mapping resultado\n");
 		exit(-1);
 	}
+
+	shmfdPI = shm_open(SHARED_NAME_PI, O_CREAT | O_RDWR, 0666);
+	if (shmfdPI == -1){
+		printf("Erro shm_open pi aborting...\n");
+		exit(-1);
+	}
+
+	if(ftruncate(shmfdPI, sharedSegSizePI) == -1){
+		printf("error truncating pi\n");
+		exit(-1);
+	}
+
+	PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
+
+	if(PI == MAP_FAILED){
+		printf("error mapping PI\n");
+		exit(-1);
+	}
+
 
 	resultadoFinal->mediaPI = 0.0;
 	resultadoFinal->mediaQuadradoPI = 0.0;
@@ -77,17 +101,24 @@ Resultado* executaSubprocessos(int nsubprocessos){
 		resultado->maiorElem = resultadoFinal->maiorElem;
 		resultado->menorElem = resultadoFinal->menorElem;
 
+		memcpy(PIFinal, PI, sharedSegSizePI);
+
 		if(sem_close(semaphore) != 0){
 			printf("error sem_close\n");
 			exit(-1);
 		}
 
-		if((munmap(resultadoFinal, sharedSegSize)) !=0){
-			printf("error unmap\n");
+		if((munmap(PI, sharedSegSizePI)) != 0){
+			printf("error unmap PI\n");
 			exit(-1);
 		}
 
-		if((shm_unlink(SHARED_NAME)) != 0){
+		if((munmap(resultadoFinal, sharedSegSizeResultado)) !=0){
+			printf("error unmap Resultado\n");
+			exit(-1);
+		}
+
+		if((shm_unlink(SHARED_NAME_RESULTADO)) != 0){
 			printf("error shm_unlink\n");
 			exit(-1);
 		}
@@ -120,7 +151,7 @@ void executaTarefaSubprocesso(int meuPidLogico){
 	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > resultado->maiorElem) ? resultadoFinal->maiorElem : resultado->maiorElem;
 	resultadoFinal->menorElem = (resultadoFinal->menorElem < resultado->menorElem) ? resultadoFinal->menorElem : resultado->menorElem;
 
-	printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
+	/*printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);*/
 
 	sem_post(semaphore);
 
