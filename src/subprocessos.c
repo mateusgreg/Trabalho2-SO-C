@@ -100,12 +100,7 @@ void executaTarefaSubprocesso(int meuPidLogico){
 	//TODO receber numero de Produtos Internos a calcular, ou seja, receber em qts linhas vai atuar, e achar um jeito de limitar(usar o k ou receber de algum modo).
 	int numeroDePIsCalcular = 4;
 	int* indices = (int*)calloc(sizeof(int), numeroDePIsCalcular);
-	float mediaPI;
-	float mediaQuadradoPI;
-	int maiorElem;
-	int menorElem;
-	int maiorPI;
-	int menorPI;
+	Resultado* resultado;
 	int i;
 	int j;
 
@@ -113,20 +108,21 @@ void executaTarefaSubprocesso(int meuPidLogico){
 		indices[j] = i;
 	}
 
-	executaTarefa(indices, numeroDePIsCalcular, &mediaPI, &mediaQuadradoPI, &maiorElem, &menorElem, &maiorPI, &menorPI);
+	//cast sem explicacao mas o compilador da warning. falando que tento fazer int em pointer sem cast
+	resultado = (Resultado*)executaTarefa(indices, numeroDePIsCalcular);
 
 	sem_wait(semaphore);
 
-	resultadoFinal->mediaPI += mediaPI;
-	resultadoFinal->mediaQuadradoPI += mediaQuadradoPI;
-	resultadoFinal->maiorPI = (resultadoFinal->maiorPI > maiorPI) ? resultadoFinal->maiorPI : maiorPI;
-	resultadoFinal->menorPI = (resultadoFinal->menorPI < menorPI) ? resultadoFinal->menorPI : menorPI;
-	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > maiorElem) ? resultadoFinal->maiorElem : maiorElem;
-	resultadoFinal->menorElem = (resultadoFinal->menorElem < menorElem) ? resultadoFinal->menorElem : menorElem;
+	resultadoFinal->mediaPI += resultado->mediaPI;
+	resultadoFinal->mediaQuadradoPI += resultado->mediaQuadradoPI;
+	resultadoFinal->maiorPI = (resultadoFinal->maiorPI > resultado->maiorPI) ? resultadoFinal->maiorPI : resultado->maiorPI;
+	resultadoFinal->menorPI = (resultadoFinal->menorPI < resultado->menorPI) ? resultadoFinal->menorPI : resultado->menorPI;
+	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > resultado->maiorElem) ? resultadoFinal->maiorElem : resultado->maiorElem;
+	resultadoFinal->menorElem = (resultadoFinal->menorElem < resultado->menorElem) ? resultadoFinal->menorElem : resultado->menorElem;
 
 	printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
 
 	sem_post(semaphore);
 
-	
+	free(resultado);	
 }

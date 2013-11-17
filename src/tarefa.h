@@ -1,3 +1,5 @@
+#include "resultado.h"
+
 typedef struct _tarefas {
 	int inicio;
 	int fim;
@@ -15,11 +17,11 @@ int produtoInternoEMaiorMenorElementoParcial(int i, int* maiorElem, int* menorEl
 /*
 recebe vetor contendo os indices das linhas/colunas das quais
 ira calcular os PIs
-retorna por referencia mediaPI, media Parcial dos PIs, mediaQuadradoPI,
+retorna ponteiro para Resultado que contem mediaPI, media Parcial dos PIs, mediaQuadradoPI,
 media parcial dos quadrados dos PIs usado no calculo do desvio padrao,
 meiorElem, maior elemento parcial da matriz gerada,
 menorElem, menor elemento parcial da matriz gerada,
 maiorPI, maior PI parcial,
 menorPI, menor PI parcial
 */
-void executaTarefa(int* indices, int tamVetorIndices, float* mediaPI, float* mediaQuadradoPI, int* maiorElem, int* menorElem, int* maiorPI, int* menorPI);
+Resultado* executaTarefa(int* indices, int tamVetorIndices);

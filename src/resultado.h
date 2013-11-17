@@ -1,3 +1,6 @@
+#ifndef RESULTADO_H
+#define RESULTADO_H
+
 typedef struct _resultado{
   float mediaPI;
   float mediaQuadradoPI;
@@ -7,3 +10,5 @@ typedef struct _resultado{
   int menorPI;
   unsigned int tempoTotal;
 } Resultado;
+
+#endif //RESULTADO_H

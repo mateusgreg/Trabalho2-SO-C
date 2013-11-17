@@ -1,6 +1,7 @@
 
 #include "tarefa.h"
 #include "stdlib.h"
+#include "utilidades.h"
 
 extern int k;
 extern int* PI;
@@ -16,20 +17,25 @@ tarefas* divideTarefas(int k, int undExecucao){
 /*
 lembrando que k, PI e matrizGerada sao globais
 */
-void executaTarefa(int* indices, int tamVetorIndices, float* mediaPI, float* mediaQuadradoPI, int* maiorElem, int* menorElem, int* maiorPI, int* menorPI ){
+Resultado* executaTarefa(int* indices, int tamVetorIndices){
 	int j;
-	*mediaPI = 0;
-	*mediaQuadradoPI = 0;
-	*maiorElem = matrizGerada[indices[0]][0];
-	*menorElem = matrizGerada[indices[0]][0];
+	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
+	resultado->mediaPI = 0.0;
+	resultado->mediaQuadradoPI = 0.0;
+	resultado->maiorElem = getMinimumInt();
+	resultado->menorElem = getMaximumInt();
+	resultado->maiorPI = getMinimumInt();
+	resultado->menorPI = getMaximumInt();
 
 	for (j = 0; j < tamVetorIndices; j++){
-		PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], maiorElem, menorElem);
-		*mediaPI += (PI[indices[j]] / k);
-		*mediaQuadradoPI += (PI[indices[j]] * PI[indices[j]]) / k;
-		*maiorPI = (PI[indices[j]] > *maiorPI || j == 0) ? PI[indices[j]] : *maiorPI; //como nao foi inicializado, inicializo com o primeiro PI calculado
-		*menorPI = (PI[indices[j]] < *menorPI || j == 0) ? PI[indices[j]] : *menorPI; //como nao foi inicializado, inicializo com o primeiro PI calculado
+		PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
+		resultado->mediaPI += (PI[indices[j]] / k);
+		resultado->mediaQuadradoPI += (PI[indices[j]] * PI[indices[j]]) / k;
+		resultado->maiorPI = (PI[indices[j]] > resultado->maiorPI) ? PI[indices[j]] : resultado->maiorPI;
+		resultado->menorPI = (PI[indices[j]] < resultado->menorPI) ? PI[indices[j]] : resultado->menorPI;
 	}
+
+	return resultado;
 }
 
 int produtoInternoEMaiorMenorElementoParcial(int i, int* maiorElem, int* menorElem){
