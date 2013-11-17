@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 int** alocaMatriz(int dimensao) {
    int **mat;
    int i;
@@ -32,23 +31,25 @@ int** alocaMatriz(int dimensao) {
 }
 
 void printMatriz(int **matriz, int dimensao) {
-  int i;
+  int i, j;
 
 	for (i=0; i<dimensao; i++) {
-	    for (int j=0; j<dimensao; j++) {
-	    	cout << matriz[i][j] << " ";
+	    for (j=0; j<dimensao; j++) {
+	    	printf("%d ", matriz[i][j]);
 	    }
-	    cout << endl;
+	    printf("\n");
 	}
 }
 
 int** geraMatriz(int dimensao) {
 
   int **matriz = alocaMatriz(dimensao);
+  int i, j;
+
   srand(time(NULL));  //inicia o gerador de numeros aleatorios
 
-  for (int i=0; i<dimensao; i++) {
-    for (int j=0; j<dimensao; j++) {
+  for (i=0; i<dimensao; i++) {
+    for (j=0; j<dimensao; j++) {
       matriz[i][j] = ((rand()%100)-50);  //gera numero inteiro entre -50 e 50
     }
   }

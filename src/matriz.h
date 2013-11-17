@@ -1,1 +1,1 @@
-int** geraMatriz(int k);
+int** geraMatriz(int dimensao);
