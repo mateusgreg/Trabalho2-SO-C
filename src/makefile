@@ -1,19 +1,19 @@
-#all: main
+#all: mainSubprocessos
 
-#main: main.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o resultado.h
-#	gcc -o main main.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o -lpthread -lrt
+#mainSubprocessos: mainSubprocessos.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o resultado.h
+#	gcc -o mainSubprocessos mainSubprocessos.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o -lm -lpthread -lrt
 
-#main.o: main.c
-#	gcc -c main.c
+#mainSubprocessos.o: mainSubprocessos.c
+#	gcc -c mainSubprocessos.c
 
 
-all: main2
+all: main
 
-main2: main2.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o resultado.h
-	gcc -o main2 main2.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o -lm -lpthread -lrt
+main: main.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o resultado.h
+	gcc -o main main.o matriz.o tarefa.o sequencial.o subprocessos.o threads.o utilidades.o -lm -lpthread -lrt
 
-main2.o: main2.c
-	gcc -c main2.c
+main.o: main.c
+	gcc -c main.c
 
 matriz.o: matriz.c
 	gcc -c matriz.c
