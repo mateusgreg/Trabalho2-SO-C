@@ -9,7 +9,8 @@ typedef struct _resultado{
   	int menorElem;
   	int maiorPI;
   	int menorPI;
-  	unsigned int tempoTotal;
+  	double tempoEmMilis;
+	double tempoEmMicros;
 } Resultado;
 
 #endif //RESULTADO_H
