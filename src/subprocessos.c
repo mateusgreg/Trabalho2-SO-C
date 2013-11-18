@@ -16,18 +16,22 @@
 #define SEM_NAME "/semaphore"
 #define SEM_INIT_VALUE 1
 
+#define DEBUG 0
+
 Resultado* resultadoFinal;
-int* PI;
+//int* PI;
 sem_t* semaphore;
 
-Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
+Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 	int i;
 	int pid;
 	int shmfdResultado;
 	int sharedSegSizeResultado = 1 * sizeof(Resultado);
 	int shmfdPI;
 	int sharedSegSizePI = k * sizeof(int);
-	Resultado* resultado = (Resultado*) malloc(sizeof(Resultado));
+	
+	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
+	resultado->PI = (int*)malloc(k * sizeof(int));
 
 	shmfdResultado = shm_open(SHARED_NAME_RESULTADO, O_CREAT | O_RDWR, 0666);
 	if (shmfdResultado == -1){
@@ -47,6 +51,7 @@ Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
 		exit(-1);
 	}
 
+
 	shmfdPI = shm_open(SHARED_NAME_PI, O_CREAT | O_RDWR, 0666);
 	if (shmfdPI == -1){
 		printf("Erro shm_open pi aborting...\n");
@@ -58,9 +63,11 @@ Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
 		exit(-1);
 	}
 
-	PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
+	//PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
+	resultadoFinal->PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
 
-	if(PI == MAP_FAILED){
+	//if(PI == MAP_FAILED){
+	if(resultadoFinal->PI == MAP_FAILED){
 		printf("error mapping PI\n");
 		exit(-1);
 	}
@@ -101,15 +108,26 @@ Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
 		resultado->maiorElem = resultadoFinal->maiorElem;
 		resultado->menorElem = resultadoFinal->menorElem;
 
-		memcpy(PIFinal, PI, sharedSegSizePI);
+		//memcpy(PIFinal, PI, sharedSegSizePI);
+		memcpy(resultado->PI, resultadoFinal->PI, sharedSegSizePI);
 
 		if(sem_close(semaphore) != 0){
 			printf("error sem_close\n");
 			exit(-1);
 		}
-
+/*
 		if((munmap(PI, sharedSegSizePI)) != 0){
 			printf("error unmap PI\n");
+			exit(-1);
+		}
+*/
+		if((munmap(resultadoFinal->PI, sharedSegSizePI)) != 0){
+			printf("error unmap PI\n");
+			exit(-1);
+		}
+
+		if((shm_unlink(SHARED_NAME_PI)) != 0){
+			printf("error shm_unlink PI\n");
 			exit(-1);
 		}
 
@@ -119,10 +137,12 @@ Resultado* executaSubprocessos(int nsubprocessos, int k, int* PIFinal){
 		}
 
 		if((shm_unlink(SHARED_NAME_RESULTADO)) != 0){
-			printf("error shm_unlink\n");
+			printf("error shm_unlink Resultado\n");
 			exit(-1);
 		}
 	}
+
+	if (DEBUG) printf("\nFim do Módulo de Subprocessos...\n");
 
 	return resultado;
 }

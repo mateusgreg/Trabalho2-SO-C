@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "tarefa.h"
 
+Resultado* resultadoFinal;
+
 Resultado* sequencial(int k, int* PI) {
   
   /*
@@ -26,5 +28,17 @@ Resultado* sequencial(int k, int* PI) {
 		indices[i] = i;
 	}
 
-	return executaTarefa(indices, k);
+	resultadoFinal = (Resultado*)malloc(sizeof(Resultado));
+	resultadoFinal->PI = (int*)malloc(k * sizeof(int));
+
+	Resultado* resultadoParcial = executaTarefa(indices, k);
+
+	resultadoFinal->mediaPI = resultadoParcial->mediaPI;
+	resultadoFinal->mediaQuadradoPI = resultadoParcial->mediaQuadradoPI;
+	resultadoFinal->maiorPI = resultadoParcial->maiorPI;
+	resultadoFinal->menorPI = resultadoParcial->menorPI;
+	resultadoFinal->maiorElem = resultadoParcial->maiorElem;
+	resultadoFinal->menorElem = resultadoParcial->menorElem;
+
+	return resultadoFinal;
 }

@@ -25,20 +25,26 @@ int* PI;
 void printResultadoConsole(Resultado* resultado) {
 	int i;
 
+	printf("\n===============\n");
+	printf(" **RESULTADO** ");
+	printf("\n===============\n\n");
+
 	printf("Menor Elemento da Matriz: %d\n", resultado->menorElem);
 	printf("Maior Elemento da Matriz: %d\n", resultado->maiorElem);
 
 	printf("\nVetor de Produtos Internos:\n[ ");
 	for(i=0; i<k-1; i++) {
-		printf("%d, ", PI[i]);
+		//printf("%d, ", PI[i]);
+		printf("%d, ", resultado->PI[i]);
 	}
-	printf("%d ]\n", PI[i]);
+	//printf("%d ]\n", PI[i]);
+	printf("%d ]\n", resultado->PI[i]);
 
-	printf("Menor Produto Interno: %d\n", resultado->menorPI);
+	printf("\nMenor Produto Interno: %d\n", resultado->menorPI);
 	printf("Maior Produto Interno: %d\n", resultado->maiorPI);
 	printf("Valor Médio dos Produtos Internos: %.4f\n", resultado->mediaPI);
 	printf("Média dos Quadrados dos Produtos Internos: %.4f\n", resultado->mediaQuadradoPI);
-	printf("Desvio Padrão dos Produtos Internos: %.4f\n", sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)) );
+	printf("Desvio Padrão dos Produtos Internos: %.4f\n\n", sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)) );
 }
 
 void printResultadoFormatoCSV(Resultado* resultado) {
@@ -57,6 +63,10 @@ int main(int argc, char* argv[]) {
 	Resultado* resultado;
 
 	while (1) {
+		printf("\n============\n");
+		printf(" **INÍCIO** ");
+		printf("\n============\n");
+		
 		printf("\nDigite a dimensão da matriz a ser gerada: ");
 		scanf("%d", &k);
 
@@ -83,7 +93,7 @@ int main(int argc, char* argv[]) {
 				printf("Quantos subprocessos você deseja utilizar no processamento da matriz?\n");
 				scanf("%d", &undExecucao);
 
-				resultado = executaSubprocessos(undExecucao, k, PI);
+				resultado = subprocessos(undExecucao, k, PI);
 				invalido = 0;
 				break;
 			case 3:

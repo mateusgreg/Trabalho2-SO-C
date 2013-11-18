@@ -4,7 +4,8 @@
 #include "utilidades.h"
 
 extern int k;
-extern int* PI;
+//extern int* PI;
+extern Resultado* resultadoFinal;	//NEW_LINE
 extern int** matrizGerada;
 
 
@@ -20,6 +21,7 @@ lembrando que k, PI e matrizGerada sao globais
 Resultado* executaTarefa(int* indices, int tamVetorIndices){
 	int j;
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
+	resultado->PI = NULL;
 	resultado->mediaPI = 0.0;
 	resultado->mediaQuadradoPI = 0.0;
 	resultado->maiorElem = getMinimumInt();
@@ -28,11 +30,12 @@ Resultado* executaTarefa(int* indices, int tamVetorIndices){
 	resultado->menorPI = getMaximumInt();
 
 	for (j = 0; j < tamVetorIndices; j++){
-		PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
-		resultado->mediaPI += (PI[indices[j]] / k);
-		resultado->mediaQuadradoPI += (PI[indices[j]] * PI[indices[j]]) / k;
-		resultado->maiorPI = (PI[indices[j]] > resultado->maiorPI) ? PI[indices[j]] : resultado->maiorPI;
-		resultado->menorPI = (PI[indices[j]] < resultado->menorPI) ? PI[indices[j]] : resultado->menorPI;
+		//PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
+		resultadoFinal->PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
+		resultado->mediaPI += (resultadoFinal->PI[indices[j]] / k);
+		resultado->mediaQuadradoPI += (resultadoFinal->PI[indices[j]] * resultadoFinal->PI[indices[j]]) / k;
+		resultado->maiorPI = (resultadoFinal->PI[indices[j]] > resultado->maiorPI) ? resultadoFinal->PI[indices[j]] : resultado->maiorPI;
+		resultado->menorPI = (resultadoFinal->PI[indices[j]] < resultado->menorPI) ? resultadoFinal->PI[indices[j]] : resultado->menorPI;
 	}
 
 	return resultado;
