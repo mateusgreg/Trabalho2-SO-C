@@ -3,7 +3,8 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: Módulo Concorrente utiliando Threads. O processamento da matriz é dividido entre as threads de forma objetivando ganho de performance (medido através do tempo de execução). */
+/* Descrição: Módulo Concorrente utilizando Threads. O processamento da matriz é dividido entre as threads objetivando obter ganho de performance através da concorrência e, principalmente, do paralelismo. */
+
 
 #include <stdio.h>
 #include <stdlib.h>

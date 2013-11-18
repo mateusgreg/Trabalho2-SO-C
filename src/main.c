@@ -3,7 +3,7 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: Programa responsável por gerar uma matriz quadrada conforme o parâmetro informado em tempo de execução */
+/* Descrição: Programa principal, responsável por interfacear com o usuário através da Console. Obtém os dados da entrada padrão (teclado) e redireciona o processamento da matriz gerada para o módulo correspondente. */
 
 
 #include <stdio.h>

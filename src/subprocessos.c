@@ -1,15 +1,22 @@
+/* Disciplina: Sistemas Operacionais I */
+/* Prof.: Antonio Thomé */
+/* Trabalho: Nr 2 */
+/* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
+/* Descrição: Módulo Concorrente utilizando Subprocessos. O processamento da matriz é dividido entre os subprocessos objetivando obter ganho de performance através da concorrência e, principalmente, do paralelismo. */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <semaphore.h>
+#include <sys/wait.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 #include "subprocessos.h"
 #include "utilidades.h"
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/mman.h>
-#include <semaphore.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
 
 #define SHARED_NAME_RESULTADO "/sharedResultado"
 #define SHARED_NAME_PI "/sharedPI"
@@ -18,9 +25,11 @@
 
 #define DEBUG 0
 
+
+//variaveis globais
 Resultado* resultadoFinal;
-//int* PI;
 sem_t* semaphore;
+
 
 Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 	int i;

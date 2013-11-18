@@ -3,7 +3,7 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: Programa responsável por gerar uma matriz quadrada conforme o parâmetro informado em tempo de execução */
+/* Descrição: Programa responsável por gerar uma matriz quadrada conforme o parâmetro informado em tempo de execução. */
 
 
 #include <stdio.h>

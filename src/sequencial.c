@@ -3,13 +3,17 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: Módulo Sequencial. Aqui não há divisão de tarefas, a própria thread main é quem realiza todo o processamento da matriz */
+/* Descrição: Módulo Sequencial. Aqui não há divisão de tarefas, a própria thread main é quem realiza todo o processamento da matriz. */
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "tarefa.h"
 
+
+//variaveis globais
 Resultado* resultadoFinal;
+
 
 Resultado* sequencial(int k, int* PI) {
   
