@@ -42,13 +42,13 @@ void printResultadoConsole(Resultado* resultado) {
 }
 
 void printResultadoFormatoCSV(Resultado* resultado) {
-	printf("Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno,
-			Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos");
+	printf("Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, ");
+	printf("Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos");
 	
 	printf("\n");
 	
-	printf("%d, %d, %d, %d, %.4f, %.4f, %.4f", resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI,
-			resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
+	printf("%d, %d, %d, %d, ", resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI);
+	printf("%.4f, %.4f, %.4f", resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
 }
 
 int main(int argc, char* argv[]) {
