@@ -1,22 +1,42 @@
+/* Disciplina: Sistemas Operacionais I */
+/* Prof.: Antonio Thomé */
+/* Trabalho: Nr 2 */
+/* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
+
+/* Descrição: Código-fonte genérico, utilizado pelos 3 módulos do programa. Auxilia na divisão e execução das tarefas entre as unidades de execução. */
+
 
 #include "tarefa.h"
 #include "stdlib.h"
 #include "utilidades.h"
 
 extern int k;
-//extern int* PI;
-extern Resultado* resultadoFinal;	//NEW_LINE
+extern Resultado* resultadoFinal;
 extern int** matrizGerada;
 
 
 Tarefas* divideTarefas(int k, int undExecucao){
-	Tarefas* t = (Tarefas*)calloc(undExecucao, sizeof(Tarefas));
-	
-	return t;
+	Tarefas* tarefas = (Tarefas*)malloc(undExecucao * sizeof(Tarefas));
+	int i, indice = 0, resto = k % undExecucao, quociente = k/undExecucao;
+
+	for (i=0; i<undExecucao; i++) {
+		if (resto) {
+			tarefas[i].inicio = indice;
+			tarefas[i].fim = indice + quociente;
+			indice += quociente + 1;
+			resto--;
+		} else{
+			tarefas[i].inicio = indice;
+			tarefas[i].fim = indice + quociente - 1;
+			indice += quociente;						
+		}
+	}
+
+	return tarefas;
 }
 
 /*
-lembrando que k, PI e matrizGerada sao globais
+lembrando que k e matrizGerada sao globais
 */
 Resultado* executaTarefa(int* indices, int tamVetorIndices){
 	int j;
@@ -30,7 +50,6 @@ Resultado* executaTarefa(int* indices, int tamVetorIndices){
 	resultado->menorPI = getMaximumInt();
 
 	for (j = 0; j < tamVetorIndices; j++){
-		//PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
 		resultadoFinal->PI[indices[j]] = produtoInternoEMaiorMenorElementoParcial(indices[j], &(resultado->maiorElem), &(resultado->menorElem));
 		resultado->mediaPI += (resultadoFinal->PI[indices[j]] / k);
 		resultado->mediaQuadradoPI += (resultadoFinal->PI[indices[j]] * resultadoFinal->PI[indices[j]]) / k;

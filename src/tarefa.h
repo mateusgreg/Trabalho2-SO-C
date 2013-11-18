@@ -1,3 +1,11 @@
+/* Disciplina: Sistemas Operacionais I */
+/* Prof.: Antonio Thomé */
+/* Trabalho: Nr 2 */
+/* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
+
+/* Descrição: API Pública utilizada pelos 3 módulos do programa, auxilia na divisão e execução das tarefas entre as unidades de execução. */
+
+
 #include "resultado.h"
 
 typedef struct _tarefas {
