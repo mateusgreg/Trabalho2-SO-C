@@ -17,7 +17,7 @@
 
 
 //variáveis globais
-int k = 1;
+int k;
 int** matrizGerada;
 int* PI;
 
@@ -29,10 +29,10 @@ void printResultadoConsole(Resultado* resultado) {
 	printf("Maior Elemento da Matriz: %d\n", resultado->maiorElem);
 
 	printf("\nVetor de Produtos Internos:\n[ ");
-	for(i=0; i<k; i++) {
-		printf("%d ", PI[i]);
+	for(i=0; i<k-1; i++) {
+		printf("%d, ", PI[i]);
 	}
-	printf("]\n");
+	printf("%d ]\n", PI[i]);
 
 	printf("Menor Produto Interno: %d\n", resultado->menorPI);
 	printf("Maior Produto Interno: %d\n", resultado->maiorPI);
@@ -44,11 +44,11 @@ void printResultadoConsole(Resultado* resultado) {
 void printResultadoFormatoCSV(Resultado* resultado) {
 	printf("Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, ");
 	printf("Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos");
-	
 	printf("\n");
 	
 	printf("%d, %d, %d, %d, ", resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI);
 	printf("%.4f, %.4f, %.4f", resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
+	printf("\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -56,10 +56,13 @@ int main(int argc, char* argv[]) {
 	int opcao, invalido, undExecucao;
 	Resultado* resultado;
 
-	while (k) {
+	while (1) {
 		printf("\nDigite a dimensão da matriz a ser gerada: ");
 		scanf("%d", &k);
 
+		if (k == 0) break;
+
+		PI = (int*)malloc(k * sizeof(int));
 		matrizGerada = geraMatriz(k);
 
 		do {
@@ -74,21 +77,24 @@ int main(int argc, char* argv[]) {
 			switch(opcao) {
 			case 1:
 				resultado = sequencial(k, PI);
+				invalido = 0;
 				break;
 			case 2:
-				printf("Quantos subprocessos você deseja utilizar no proessamento da matriz?\n");
+				printf("Quantos subprocessos você deseja utilizar no processamento da matriz?\n");
 				scanf("%d", &undExecucao);
 
 				resultado = executaSubprocessos(undExecucao, k, PI);
+				invalido = 0;
 				break;
 			case 3:
-				printf("Quantos subprocessos você deseja utilizar no proessamento da matriz?\n");
+				printf("Quantas threads você deseja utilizar no processamento da matriz?\n");
 				scanf("%d", &undExecucao);
 
 				resultado = threads(undExecucao, k, PI);
+				invalido = 0;
 				break;
 			default:
-				printf("\nERRO: Menu inválido!\n");
+				printf("\nOpção inválida! Tente novamente...\n");
 				invalido = 1;
 			}
 		}while (invalido);
@@ -96,6 +102,8 @@ int main(int argc, char* argv[]) {
 
 		printResultadoConsole(resultado);
 		//printResultadoFormatoCSV(resultado);
+
+		free(resultado);
 	}
 
 	return 0;
