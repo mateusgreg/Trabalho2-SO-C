@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 
 			switch(opcao) {
 			case 1:
-    				gettimeofday(&tInicial, NULL);	// start timer
+    			gettimeofday(&tInicial, NULL);	// start timer
 				resultado = sequencial(k);
 				gettimeofday(&tFinal, NULL);	// stop timer
 

@@ -17,10 +17,10 @@ Resultado* resultadoFinal;
 
 Resultado* sequencial(int k) {
 
-	Tarefas *tarefas = (Tarefas*)malloc(sizeof(Tarefas));
 	resultadoFinal = (Resultado*)malloc(sizeof(Resultado));
 	resultadoFinal->PI = (int*)malloc(k * sizeof(int));
 
+	Tarefas *tarefas = (Tarefas*)malloc(sizeof(Tarefas));
 	tarefas->inicio = 0;
 	tarefas->fim = k-1;
 	Resultado* resultadoParcial = executaTarefa(tarefas);
