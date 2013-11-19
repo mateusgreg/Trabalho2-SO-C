@@ -87,10 +87,10 @@ void gerarArquivoCSV(Resultado* resultado, char* processamento, int undExecucao)
 	if (fgetc(arquivo) == EOF) {	//ainda não há nada no arquivo, então tenho que imprimir o cabeçalho
 		if (DEBUG) printf("Imprimindo o cabeçalho no arquivo CSV...\n");
 
-		fprintf(arquivo, "Processamento, Unidades de Execução, Tamanho da Matriz, Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos, Tempo de Execução (em Microsegundos)\n");
+		fprintf(arquivo, "Tipo de Processamento, Unidades de Execução, Dimensão da Matriz, Tempo de Processamento (Microsegundos), Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos\n");
 	}
 
-	fprintf(arquivo, "%s, %d, %d, %d, %d, %d, %d, %.4f, %.4f, %.4f, %.4f\n", processamento, undExecucao, k, resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI, resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)), resultado->tempoEmMicros);
+	fprintf(arquivo, "%s, %d, %dx%d, %.4f, %d, %d, %d, %d, %.4f, %.4f, %.4f\n", processamento, undExecucao, k, k, resultado->tempoEmMicros, resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI, resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
 
 	fclose(arquivo);
 	printf("Arquivo CSV contendo os resultados gerado!\n");
