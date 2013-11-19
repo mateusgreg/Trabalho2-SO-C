@@ -118,7 +118,7 @@ Resultado* threads(int nThreads, int k) {
 	resultado->menorPI = resultadoFinal->menorPI;
 	resultado->maiorElem = resultadoFinal->maiorElem;
 	resultado->menorElem = resultadoFinal->menorElem;
-	memcpy(resultado->PI, resultadoFinal->PI, sizeof(resultadoFinal->PI));
+	memcpy(resultado->PI, resultadoFinal->PI, k*sizeof(int));
 
 	puts("Thread Principal: Struct resultado prenchido...");
 
