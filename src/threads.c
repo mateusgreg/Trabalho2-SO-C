@@ -44,6 +44,8 @@ Resultado* threads(int nThreads, int k) {
 		quociente = k/nThreads,
 		resto = k % nThreads;
 
+	Resultado* resultado;
+	
 	pthread_t *threads;
 	//TODO:Criar semáforos
 

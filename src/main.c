@@ -96,7 +96,6 @@ int main(int argc, char* argv[]) {
 
 		if (k == 0) break;
 
-		PI = (int*)malloc(k * sizeof(int));
 		matrizGerada = geraMatriz(k);
 
 		do {
