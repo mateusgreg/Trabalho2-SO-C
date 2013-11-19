@@ -13,6 +13,7 @@
 #include <string.h>
 #include "threads.h"
 #include "tarefa.h"
+#include "utilidades.h"
 
 #define DEBUG 1
 
@@ -20,7 +21,7 @@
 /* Variáveis globais */
 Resultado* resultadoFinal;
 Tarefas* tarefas;
-sem_t* semaphore;
+sem_t semaphore;
 
 
 pthread_t *alocaVetorThreads(int n){
@@ -43,7 +44,7 @@ void* processaMatriz(void *threadId) {
 	if (DEBUG) printf("Thread %d: Executei Tarefas de %d a %d...\n", tid, tarefas[tid].inicio, tarefas[tid].fim);
 
 
-	sem_wait(semaphore);
+	sem_wait(&semaphore);
 
 	if (DEBUG) printf("Thread %d: Estou na SC...\n", tid);
 
@@ -56,8 +57,10 @@ void* processaMatriz(void *threadId) {
 
 	if (DEBUG) printf("tid=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", tid, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
 
-	sem_post(semaphore);
+	sem_post(&semaphore);
 
+	if (DEBUG) printf("Thread %d: Sai da SC...\n", tid);
+	
 	free(resultado);
 }
 
@@ -65,11 +68,16 @@ Resultado* threads(int nThreads, int k) {
 	puts("Início do módulo de Threads...");
 	
 	int t;
-
 	tarefas = divideTarefas(nThreads);
 
 	resultadoFinal = (Resultado*)malloc(sizeof(Resultado));
 	resultadoFinal->PI = (int*)malloc(k * sizeof(int));
+	resultadoFinal->mediaPI = 0.0;
+	resultadoFinal->mediaQuadradoPI = 0.0;
+	resultadoFinal->maiorPI = getMinimumInt();
+	resultadoFinal->menorPI = getMaximumInt();
+	resultadoFinal->maiorElem = getMinimumInt();
+	resultadoFinal->menorElem = getMaximumInt();
 
 	puts("resultadoFinal OK!");
 
@@ -100,7 +108,10 @@ Resultado* threads(int nThreads, int k) {
 		}
 	}
 
+	puts("Thread Principal: Todas as Threads terminaram...");
+
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
+	resultado->PI = (int*)malloc(k * sizeof(int));
 	resultado->mediaPI = resultadoFinal->mediaPI;
 	resultado->mediaQuadradoPI = resultadoFinal->mediaQuadradoPI;
 	resultado->maiorPI = resultadoFinal->maiorPI;
@@ -109,12 +120,13 @@ Resultado* threads(int nThreads, int k) {
 	resultado->menorElem = resultadoFinal->menorElem;
 	memcpy(resultado->PI, resultadoFinal->PI, sizeof(resultadoFinal->PI));
 
-	puts("Encerrando Módulo de Threads...");
+	puts("Thread Principal: Struct resultado prenchido...");
 
 	free(threads);
-	free(semaphore);
 	free(resultadoFinal->PI);
 	free(resultadoFinal);
+
+	puts("Encerrando Módulo de Threads...");
 
 	return resultado;
 }
