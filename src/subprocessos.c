@@ -114,7 +114,7 @@ Resultado* subprocessos(int nSubprocessos, int k){
 		exit(-1);
 	}
 	
-	memcpy(tarefas, divideTarefas(k, nSubprocessos), sharedSegSizeTarefas);
+	memcpy(tarefas, divideTarefas(nSubprocessos), sharedSegSizeTarefas);
 
 
 	/* Inicializando Semáforo */

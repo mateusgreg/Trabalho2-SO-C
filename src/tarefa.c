@@ -6,16 +6,20 @@
 /* Descrição: Código-fonte genérico, utilizado pelos 3 módulos do programa. Auxilia na divisão e execução das tarefas entre as unidades de execução. */
 
 
+#include <stdio.h>
 #include "tarefa.h"
 #include "stdlib.h"
 #include "utilidades.h"
+
+#define DEBUG 1
+
 
 extern int k;
 extern int** matrizGerada;
 extern Resultado* resultadoFinal;
 
 
-Tarefas* divideTarefas(int k, int undExecucao){
+Tarefas* divideTarefas(int undExecucao){
 	Tarefas* tarefas = (Tarefas*)malloc(undExecucao * sizeof(Tarefas));
 	int i, indice = 0, resto = k % undExecucao, quociente = k/undExecucao;
 
@@ -31,6 +35,8 @@ Tarefas* divideTarefas(int k, int undExecucao){
 			indice += quociente;						
 		}
 	}
+
+	if (DEBUG) printf("\nAloquei Vetor de Tarefas...\n");
 
 	return tarefas;
 }
