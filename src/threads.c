@@ -15,7 +15,7 @@
 #include "tarefa.h"
 #include "utilidades.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 
 /* Variáveis globais */
@@ -55,7 +55,7 @@ void* processaMatriz(void *threadId) {
 	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > resultado->maiorElem) ? resultadoFinal->maiorElem : resultado->maiorElem;
 	resultadoFinal->menorElem = (resultadoFinal->menorElem < resultado->menorElem) ? resultadoFinal->menorElem : resultado->menorElem;
 
-	if (DEBUG) printf("tid=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", tid, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
+	if (DEBUG) printf("tid=%d, maiorElem=%d, menorElem=%d, maiorPI=%llu, menorPI=%llu, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", tid, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
 
 	sem_post(&semaphore);
 
@@ -71,7 +71,7 @@ Resultado* threads(int nThreads, int k) {
 	tarefas = divideTarefas(nThreads);
 
 	resultadoFinal = (Resultado*)malloc(sizeof(Resultado));
-	resultadoFinal->PI = (int*)malloc(k * sizeof(int));
+	resultadoFinal->PI = (unsigned long long int*)malloc(k * sizeof(unsigned long long int));
 	resultadoFinal->mediaPI = 0.0;
 	resultadoFinal->mediaQuadradoPI = 0.0;
 	resultadoFinal->maiorPI = getMinimumInt();
@@ -111,14 +111,14 @@ Resultado* threads(int nThreads, int k) {
 	puts("Thread Principal: Todas as Threads terminaram...");
 
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
-	resultado->PI = (int*)malloc(k * sizeof(int));
+	resultado->PI = (unsigned long long int*)malloc(k * sizeof(unsigned long long int));
 	resultado->mediaPI = resultadoFinal->mediaPI;
 	resultado->mediaQuadradoPI = resultadoFinal->mediaQuadradoPI;
 	resultado->maiorPI = resultadoFinal->maiorPI;
 	resultado->menorPI = resultadoFinal->menorPI;
 	resultado->maiorElem = resultadoFinal->maiorElem;
 	resultado->menorElem = resultadoFinal->menorElem;
-	memcpy(resultado->PI, resultadoFinal->PI, k*sizeof(int));
+	memcpy(resultado->PI, resultadoFinal->PI, k*sizeof(unsigned long long int));
 
 	puts("Thread Principal: Struct resultado prenchido...");
 

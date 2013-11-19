@@ -10,13 +10,13 @@
 #define RESULTADO_H
 
 typedef struct _resultado{
-	int* PI;
-  	float mediaPI;
-  	float mediaQuadradoPI;
-  	int maiorElem;
+	int maiorElem;
   	int menorElem;
-  	int maiorPI;
-  	int menorPI;
+	unsigned long long int* PI;
+  	unsigned long long int maiorPI;
+  	unsigned long long int menorPI;
+  	double mediaPI;
+  	double mediaQuadradoPI;
   	double tempoEmMilis;
 	double tempoEmMicros;
 } Resultado;

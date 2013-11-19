@@ -40,12 +40,12 @@ Resultado* subprocessos(int nSubprocessos, int k){
 	int shmfdResultado;
 	int sharedSegSizeResultado = 1 * sizeof(Resultado);
 	int shmfdPI;
-	int sharedSegSizePI = k * sizeof(int);
+	int sharedSegSizePI = k * sizeof(unsigned long long int);
 	int shmfdTarefas;
 	int sharedSegSizeTarefas = nSubprocessos * sizeof(Tarefas);
 
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
-	resultado->PI = (int*)malloc(k * sizeof(int));
+	resultado->PI = (unsigned long long int*)malloc(k * sizeof(unsigned long long int));
 
 
 	/* Struct que armazena os resultados do processamento da matriz */
@@ -212,7 +212,7 @@ void executaTarefaSubprocesso(int meuPidLogico){
 	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > resultado->maiorElem) ? resultadoFinal->maiorElem : resultado->maiorElem;
 	resultadoFinal->menorElem = (resultadoFinal->menorElem < resultado->menorElem) ? resultadoFinal->menorElem : resultado->menorElem;
 
-	if (DEBUG) printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
+	if (DEBUG) printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%llu, menorPI=%llu, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
 
 	sem_post(semaphore);
 

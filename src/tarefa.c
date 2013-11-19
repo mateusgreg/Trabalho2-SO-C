@@ -41,7 +41,7 @@ Tarefas* divideTarefas(int undExecucao){
 	return tarefas;
 }
 
-Resultado* executaTarefa(Tarefas* tarefas) {//int inicio, int fim){
+Resultado* executaTarefa(Tarefas* tarefas) {
 	int i;
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
 	resultado->PI = NULL;
@@ -63,17 +63,16 @@ Resultado* executaTarefa(Tarefas* tarefas) {//int inicio, int fim){
 	return resultado;
 }
 
-int produtoInternoEMaiorMenorElementoParcial(int i, int* maiorElem, int* menorElem){
-	int j;
-	int PI = 0;
-	int auxMaiorMenor;
+unsigned long long int produtoInternoEMaiorMenorElementoParcial(int i, int* maiorElem, int* menorElem){
+	int j, auxMaiorMenorElem;
+	unsigned long long int PI = 0;
 
 	for(j = 0; j < k; j++){
 		PI += matrizGerada[i][j] * matrizGerada[j][i];
-		auxMaiorMenor = (matrizGerada[i][j] > matrizGerada[j][i]) ? matrizGerada[i][j] : matrizGerada[j][i];
-		*maiorElem = (*maiorElem > auxMaiorMenor) ? *maiorElem : auxMaiorMenor;
-		auxMaiorMenor = (matrizGerada[i][j] < matrizGerada[j][i]) ? matrizGerada[i][j] : matrizGerada[j][i];
-		*menorElem = (*menorElem < auxMaiorMenor) ? *menorElem : auxMaiorMenor;
+		auxMaiorMenorElem = (matrizGerada[i][j] > matrizGerada[j][i]) ? matrizGerada[i][j] : matrizGerada[j][i];
+		*maiorElem = (*maiorElem > auxMaiorMenorElem) ? *maiorElem : auxMaiorMenorElem;
+		auxMaiorMenorElem = (matrizGerada[i][j] < matrizGerada[j][i]) ? matrizGerada[i][j] : matrizGerada[j][i];
+		*menorElem = (*menorElem < auxMaiorMenorElem) ? *menorElem : auxMaiorMenorElem;
 	}
 
 	return PI;

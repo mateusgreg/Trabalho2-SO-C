@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG 0
+
+
 int** alocaMatriz(int dimensao) {
    int **mat;
    int i;
@@ -50,12 +53,11 @@ int** geraMatriz(int dimensao) {
 
   for (i=0; i<dimensao; i++) {
     for (j=0; j<dimensao; j++) {
-      matriz[i][j] = ((rand()%100)-50);  //gera numero inteiro entre -50 e 50
+      matriz[i][j] = ((rand()%1000));  //gera numero inteiro entre 0 e 1000
     }
   }
 
-  //DEGUG:
-  printMatriz(matriz, dimensao);
+  if (DEBUG) printMatriz(matriz, dimensao);
 
   return matriz;
 }

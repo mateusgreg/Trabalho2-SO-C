@@ -18,7 +18,7 @@ Resultado* resultadoFinal;
 Resultado* sequencial(int k) {
 
 	resultadoFinal = (Resultado*)malloc(sizeof(Resultado));
-	resultadoFinal->PI = (int*)malloc(k * sizeof(int));
+	resultadoFinal->PI = (unsigned long long int*)malloc(k * sizeof(unsigned long long int));
 
 	Tarefas *tarefas = (Tarefas*)malloc(sizeof(Tarefas));
 	tarefas->inicio = 0;
