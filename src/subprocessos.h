@@ -3,7 +3,7 @@
 /* Trabalho: Nr 2 */
 /* Autores: João Paulo Ramirez, Jonas Tomaz e Mateus Gregório */
 
-/* Descrição: API Pública do Módulo Concorrente utilizando Subprocessos. */
+/* Descrição: API pública do Módulo Concorrente utilizando Subprocessos. */
 
 
 #include "resultado.h"
@@ -12,7 +12,7 @@
 que devem ser criados para a execucao da tarefa
 e retorna o resultado calculado pelos subprocessos
 */
-Resultado* subprocessos(int nsubprocessos, int k, int* PIFInal);
+Resultado* subprocessos(int nSubprocessos, int k);
 
 
 /*funcao que cada subprocesso vai realmente executar.

@@ -17,10 +17,9 @@
 #include "threads.h"
 
 
-//variáveis globais
+/* Variáveis globais */
 int k;
 int** matrizGerada;
-int* PI;
 
 
 double tempoEmMilisegundos(struct timeval tInicial, struct timeval tFinal) {
@@ -112,7 +111,7 @@ int main(int argc, char* argv[]) {
 			switch(opcao) {
 			case 1:
     				gettimeofday(&tInicial, NULL);	// start timer
-				resultado = sequencial(k, PI);
+				resultado = sequencial(k);
 				gettimeofday(&tFinal, NULL);	// stop timer
 
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);
@@ -125,7 +124,7 @@ int main(int argc, char* argv[]) {
 				scanf("%d", &undExecucao);
 				
 				gettimeofday(&tInicial, NULL);	// start timer
-				resultado = subprocessos(undExecucao, k, PI);
+				resultado = subprocessos(undExecucao, k);
 				gettimeofday(&tFinal, NULL);	// stop timer
 
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);
@@ -138,7 +137,7 @@ int main(int argc, char* argv[]) {
 				scanf("%d", &undExecucao);
 
 				gettimeofday(&tInicial, NULL);	// start timer
-				resultado = threads(undExecucao, k, PI);
+				resultado = threads(undExecucao, k);
 				gettimeofday(&tFinal, NULL);	// stop timer
 				
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);

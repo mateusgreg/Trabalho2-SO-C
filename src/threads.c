@@ -14,11 +14,10 @@
 #include "tarefa.h"
 
 
-//variaveis globais
-Resultado* resultado;
+/* Variáveis globais */
+Resultado* resultadoFinal;
 
 
-//aloca espaco em memoria para um vetor do tipo pthread_t de n elementos
 pthread_t *alocaVetorThreads(int n){
 	pthread_t *vet = calloc(n, sizeof(pthread_t));
 
@@ -37,9 +36,9 @@ void* processaMatriz(void *threadId) {
 
 }
 
-Resultado* threads(int nThreads, int k, int* PIFinal) {
+Resultado* threads(int nThreads, int k) {
 
-	int //nThreads = k,	//TODO: DEfinir logica para escolher num. de threads
+	int //nThreads = k,	//TODO: Definir logica para escolher num. de threads
 		t,
 		indice=0,
 		quociente = k/nThreads,

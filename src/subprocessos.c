@@ -17,70 +17,55 @@
 #include <sys/stat.h>
 #include "subprocessos.h"
 #include "utilidades.h"
+#include "tarefa.h"
 
 #define SHARED_NAME_RESULTADO "/sharedResultado"
 #define SHARED_NAME_PI "/sharedPI"
+#define SHARED_NAME_TAREFAS "/sharedTarefas"
 #define SEM_NAME "/semaphore"
 #define SEM_INIT_VALUE 1
 
 #define DEBUG 0
 
 
-//variaveis globais
+/* Variáveis globais */
 Resultado* resultadoFinal;
+Tarefas* tarefas;
 sem_t* semaphore;
 
 
-Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
+Resultado* subprocessos(int nSubprocessos, int k){
 	int i;
 	int pid;
 	int shmfdResultado;
 	int sharedSegSizeResultado = 1 * sizeof(Resultado);
 	int shmfdPI;
 	int sharedSegSizePI = k * sizeof(int);
-	
+	int shmfdTarefas;
+	int sharedSegSizeTarefas = nSubprocessos * sizeof(Tarefas);
+
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
 	resultado->PI = (int*)malloc(k * sizeof(int));
 
+
+	/* Struct que armazena os resultados do processamento da matriz */
 	shmfdResultado = shm_open(SHARED_NAME_RESULTADO, O_CREAT | O_RDWR, 0666);
 	if (shmfdResultado == -1){
-		printf("Erro shm_open resultado aborting...\n");
+		printf("Erro shm_open Resultado aborting...\n");
 		exit(-1);
 	}
 
 	if(ftruncate(shmfdResultado, sharedSegSizeResultado) == -1){
-		printf("error truncating resultado\n");
+		printf("error truncating Resultado\n");
 		exit(-1);
 	}
 
 	resultadoFinal = mmap(NULL, sharedSegSizeResultado, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdResultado, 0);
 
 	if(resultadoFinal == MAP_FAILED){
-		printf("error mapping resultado\n");
+		printf("error mapping Resultado\n");
 		exit(-1);
 	}
-
-
-	shmfdPI = shm_open(SHARED_NAME_PI, O_CREAT | O_RDWR, 0666);
-	if (shmfdPI == -1){
-		printf("Erro shm_open pi aborting...\n");
-		exit(-1);
-	}
-
-	if(ftruncate(shmfdPI, sharedSegSizePI) == -1){
-		printf("error truncating pi\n");
-		exit(-1);
-	}
-
-	//PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
-	resultadoFinal->PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
-
-	//if(PI == MAP_FAILED){
-	if(resultadoFinal->PI == MAP_FAILED){
-		printf("error mapping PI\n");
-		exit(-1);
-	}
-
 
 	resultadoFinal->mediaPI = 0.0;
 	resultadoFinal->mediaQuadradoPI = 0.0;
@@ -88,15 +73,59 @@ Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 	resultadoFinal->menorPI = getMaximumInt();
 	resultadoFinal->maiorElem = getMinimumInt();
 	resultadoFinal->menorElem = getMaximumInt();
-	
 
+
+	/* Vetor de Produtos Internos */
+	shmfdPI = shm_open(SHARED_NAME_PI, O_CREAT | O_RDWR, 0666);
+	if (shmfdPI == -1){
+		printf("Erro shm_open PI aborting...\n");
+		exit(-1);
+	}
+
+	if(ftruncate(shmfdPI, sharedSegSizePI) == -1){
+		printf("error truncating PI\n");
+		exit(-1);
+	}
+
+	resultadoFinal->PI = mmap(NULL, sharedSegSizePI, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdPI, 0);
+
+	if(resultadoFinal->PI == MAP_FAILED){
+		printf("error mapping PI\n");
+		exit(-1);
+	}
+
+
+	/* Vetor de Tarefas */
+	shmfdTarefas = shm_open(SHARED_NAME_TAREFAS, O_CREAT | O_RDWR, 0666);
+	if (shmfdTarefas == -1){
+		printf("Erro shm_open Tarefas aborting...\n");
+		exit(-1);
+	}
+
+	if(ftruncate(shmfdTarefas, sharedSegSizeTarefas) == -1){
+		printf("error truncating Tarefas\n");
+		exit(-1);
+	}
+
+	tarefas = mmap(NULL, sharedSegSizeTarefas, PROT_READ | PROT_WRITE, MAP_SHARED, shmfdTarefas, 0);
+
+	if(tarefas == MAP_FAILED){
+		printf("error mapping Tarefas\n");
+		exit(-1);
+	}
+	
+	memcpy(tarefas, divideTarefas(k, nSubprocessos), sharedSegSizeTarefas);
+
+
+	/* Inicializando Semáforo */
 	semaphore = sem_open(SEM_NAME, O_CREAT, 0666, SEM_INIT_VALUE);
 	if(semaphore == SEM_FAILED){
 		printf("error sem_open\n");
 		exit(-1);
 	}
 
-	for(i = 0; i < nsubprocessos; i++){
+
+	for(i = 0; i < nSubprocessos; i++){
 		pid = fork();
 		if(pid < 0){ printf("Erro ao criar subprocessos, abortando...\n"); exit(-1); }
 		if(pid == 0){
@@ -106,7 +135,7 @@ Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 	}
 
 	if(pid > 0){
-		for(i = 0; i < nsubprocessos; i++){
+		for(i = 0; i < nSubprocessos; i++){
 			wait(NULL);
 		}
 
@@ -117,19 +146,29 @@ Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 		resultado->maiorElem = resultadoFinal->maiorElem;
 		resultado->menorElem = resultadoFinal->menorElem;
 
-		//memcpy(PIFinal, PI, sharedSegSizePI);
 		memcpy(resultado->PI, resultadoFinal->PI, sharedSegSizePI);
 
+		
+		/* Encerrando Semáforo */
 		if(sem_close(semaphore) != 0){
 			printf("error sem_close\n");
 			exit(-1);
 		}
-/*
-		if((munmap(PI, sharedSegSizePI)) != 0){
-			printf("error unmap PI\n");
+
+
+		/* Unmaping Vetor de Tarefas */
+		if((munmap(tarefas, sharedSegSizeTarefas)) != 0){
+			printf("error unmap Tarefas\n");
 			exit(-1);
 		}
-*/
+
+		if((shm_unlink(SHARED_NAME_TAREFAS)) != 0){
+			printf("error shm_unlink Tarefas\n");
+			exit(-1);
+		}
+
+
+		/* Unmaping Vetor de PIs */
 		if((munmap(resultadoFinal->PI, sharedSegSizePI)) != 0){
 			printf("error unmap PI\n");
 			exit(-1);
@@ -140,6 +179,8 @@ Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 			exit(-1);
 		}
 
+
+		/* Unmaping Struct de Resultados */
 		if((munmap(resultadoFinal, sharedSegSizeResultado)) !=0){
 			printf("error unmap Resultado\n");
 			exit(-1);
@@ -157,19 +198,10 @@ Resultado* subprocessos(int nsubprocessos, int k, int* PIFinal){
 }
 
 void executaTarefaSubprocesso(int meuPidLogico){
-	//TODO receber numero de Produtos Internos a calcular, ou seja, receber em qts linhas vai atuar, e achar um jeito de limitar(usar o k ou receber de algum modo).
-	int numeroDePIsCalcular = 4;
-	int* indices = (int*)calloc(sizeof(int), numeroDePIsCalcular);
 	Resultado* resultado;
-	int i;
-	int j;
 
-	for(j = 0, i = meuPidLogico * numeroDePIsCalcular; j < numeroDePIsCalcular; j++, i++){
-		indices[j] = i;
-	}
-
-	//cast sem explicacao mas o compilador da warning. falando que tento fazer int em pointer sem cast
-	resultado = (Resultado*)executaTarefa(indices, numeroDePIsCalcular);
+	/* Cast sem explicacao mas o compilador da warning. falando que tento fazer int em pointer sem cast */
+	resultado = (Resultado*)executaTarefa(&tarefas[meuPidLogico]);
 
 	sem_wait(semaphore);
 
@@ -180,7 +212,7 @@ void executaTarefaSubprocesso(int meuPidLogico){
 	resultadoFinal->maiorElem = (resultadoFinal->maiorElem > resultado->maiorElem) ? resultadoFinal->maiorElem : resultado->maiorElem;
 	resultadoFinal->menorElem = (resultadoFinal->menorElem < resultado->menorElem) ? resultadoFinal->menorElem : resultado->menorElem;
 
-	/*printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);*/
+	if (DEBUG) printf("meuPidLogico=%d, maiorElem=%d, menorElem=%d, maiorPI=%d, menorPI=%d, mediaPI = %.4f, mediaQuadradoPI = %.4f\n", meuPidLogico, resultadoFinal->maiorElem, resultadoFinal->menorElem, resultadoFinal->maiorPI, resultadoFinal->menorPI, resultadoFinal->mediaPI, resultadoFinal->mediaQuadradoPI);
 
 	sem_post(semaphore);
 

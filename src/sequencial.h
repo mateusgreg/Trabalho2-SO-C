@@ -8,4 +8,4 @@
 
 #include "resultado.h"
 
-Resultado* sequencial(int k, int* PI);
+Resultado* sequencial(int k);

@@ -21,7 +21,6 @@ retorna o valor do PI e, por referencia os valores do maior e menor elemento
 */
 int produtoInternoEMaiorMenorElementoParcial(int i, int* maiorElem, int* menorElem);
 
-
 /*
 recebe vetor contendo os indices das linhas/colunas das quais
 ira calcular os PIs
@@ -32,4 +31,4 @@ menorElem, menor elemento parcial da matriz gerada,
 maiorPI, maior PI parcial,
 menorPI, menor PI parcial
 */
-Resultado* executaTarefa(int* indices, int tamVetorIndices);
+Resultado* executaTarefa(Tarefas* tarefas);
