@@ -11,7 +11,7 @@
 #include "stdlib.h"
 #include "utilidades.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 
 extern int k;

@@ -37,7 +37,6 @@ pthread_t *alocaVetorThreads(int n){
 
 void* processaMatriz(void *threadId) {
 	int tid = (int)threadId;
-	
 	if (DEBUG) printf("Executando código da Thread %d...\n", tid);
 
 	Resultado* resultado = executaTarefa(&tarefas[tid]);	
@@ -46,7 +45,7 @@ void* processaMatriz(void *threadId) {
 
 	sem_wait(&semaphore);
 
-	if (DEBUG) printf("Thread %d: Estou na SC...\n", tid);
+	if (DEBUG) printf("Thread %d: Estrei na SC...\n", tid);
 
 	resultadoFinal->mediaPI += resultado->mediaPI;
 	resultadoFinal->mediaQuadradoPI += resultado->mediaQuadradoPI;
@@ -59,13 +58,13 @@ void* processaMatriz(void *threadId) {
 
 	sem_post(&semaphore);
 
-	if (DEBUG) printf("Thread %d: Sai da SC...\n", tid);
+	if (DEBUG) printf("Thread %d: Saí da SC...\n", tid);
 	
 	free(resultado);
 }
 
 Resultado* threads(int nThreads, int k) {
-	puts("Início do módulo de Threads...");
+	if (DEBUG) puts("Início do módulo de Threads...");
 	
 	int t;
 	tarefas = divideTarefas(nThreads);
@@ -79,14 +78,9 @@ Resultado* threads(int nThreads, int k) {
 	resultadoFinal->maiorElem = getMinimumInt();
 	resultadoFinal->menorElem = getMaximumInt();
 
-	puts("resultadoFinal OK!");
 
 	sem_init(&semaphore, 0, 1);
-
-	puts("Semáforo OK!");
-
 	pthread_t* threads = alocaVetorThreads(nThreads);
-	puts("Aloquei Vetor de Threads...");
 
 	//Cria e inicia as threads
 	for(t=0; t<nThreads; t++) {
@@ -98,7 +92,7 @@ Resultado* threads(int nThreads, int k) {
 		if (DEBUG) printf("Thread %d iniciando...\n", t);
 	}
 
-	puts("Thread Principal: Iniciei todas as Threads");
+	if (DEBUG) puts("Thread Principal: Iniciei todas as Threads");
 
 	//Espera o termino de todas as threads
 	for(t=0; t<nThreads; t++) {
@@ -108,7 +102,7 @@ Resultado* threads(int nThreads, int k) {
 		}
 	}
 
-	puts("Thread Principal: Todas as Threads terminaram...");
+	if (DEBUG) puts("Thread Principal: Todas as Threads terminaram...");
 
 	Resultado* resultado = (Resultado*)malloc(sizeof(Resultado));
 	resultado->PI = (unsigned long long int*)malloc(k * sizeof(unsigned long long int));
@@ -120,13 +114,12 @@ Resultado* threads(int nThreads, int k) {
 	resultado->menorElem = resultadoFinal->menorElem;
 	memcpy(resultado->PI, resultadoFinal->PI, k*sizeof(unsigned long long int));
 
-	puts("Thread Principal: Struct resultado prenchido...");
 
 	free(threads);
 	free(resultadoFinal->PI);
 	free(resultadoFinal);
 
-	puts("Encerrando Módulo de Threads...");
+	if (DEBUG) puts("Encerrando módulo de Threads...");
 
 	return resultado;
 }
