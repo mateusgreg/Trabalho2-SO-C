@@ -19,6 +19,7 @@ typedef struct _resultado{
   	double mediaQuadradoPI;
   	double tempoEmMilis;
 	double tempoEmMicros;
+	double tempoEmSegundos;
 } Resultado;
 
 #endif //RESULTADO_H

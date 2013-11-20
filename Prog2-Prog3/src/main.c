@@ -28,7 +28,7 @@ double tempoEmMilisegundos(struct timeval tInicial, struct timeval tFinal) {
 	double tempo;
 
 	tempo = (long long)(tFinal.tv_sec - tInicial.tv_sec) * 1000.0 +		// segundos para milisegundos
-		(long long)(tFinal.tv_usec - tInicial.tv_usec) / 1000.0;		// microsegundos para milisegundos
+			(long long)(tFinal.tv_usec - tInicial.tv_usec) / 1000.0;	// microsegundos para milisegundos
 
 	return tempo;
 }
@@ -37,7 +37,16 @@ double tempoEmMicrosegundos(struct timeval tInicial, struct timeval tFinal) {
 	double tempo;
 
 	tempo = (long long)(tFinal.tv_sec - tInicial.tv_sec) * 1000000.0 +		// segundos para microsegundos
-		(long long)(tFinal.tv_usec - tInicial.tv_usec);						// microsegundos
+			(long long)(tFinal.tv_usec - tInicial.tv_usec);					// microsegundos
+
+	return tempo;
+}
+
+double tempoEmSegundos(struct timeval tInicial, struct timeval tFinal) {
+	double tempo;
+
+	tempo = (long long)(tFinal.tv_sec - tInicial.tv_sec) +					// segundos
+			(long long)(tFinal.tv_usec - tInicial.tv_usec) / 1000000.0;		// microsegundos para segundos
 
 	return tempo;
 }
@@ -86,10 +95,10 @@ void gerarArquivoCSV(Resultado* resultado, char* processamento, int undExecucao)
 	if (fgetc(arquivo) == EOF) {	//ainda não há nada no arquivo, então tenho que imprimir o cabeçalho
 		if (DEBUG) printf("Imprimindo o cabeçalho no arquivo CSV...\n");
 
-		fprintf(arquivo, "Tipo de Processamento, Unidades de Execução, Dimensão da Matriz, Tempo de Processamento (Microsegundos), Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos\n");
+		fprintf(arquivo, "Tipo de Processamento, Unidades de Execução, Dimensão da Matriz, Tempo de Processamento (Segundos), Menor Elemento da Matriz, Maior Elemento da Matriz, Menor Produto Interno, Maior Produto Interno, Valor Médio dos Produtos Internos, Média dos Quadrados dos Produtos Internos, Desvio Padrão dos Produtos Internos\n");
 	}
 
-	fprintf(arquivo, "%s, %d, %dx%d, %.4f, %d, %d, %llu, %llu, %.4f, %.4f, %.4f\n", processamento, undExecucao, k, k, resultado->tempoEmMicros, resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI, resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
+	fprintf(arquivo, "%s, %d, %d, %.6f, %d, %d, %llu, %llu, %.4f, %.4f, %.4f\n", processamento, undExecucao, k, resultado->tempoEmSegundos, resultado->menorElem, resultado->maiorElem, resultado->menorPI, resultado->maiorPI, resultado->mediaPI, resultado->mediaQuadradoPI, sqrt(resultado->mediaQuadradoPI - pow(resultado->mediaPI, 2)));
 
 	fclose(arquivo);
 	printf("Arquivo CSV contendo os resultados gerados!\n");
@@ -131,6 +140,7 @@ int main(int argc, char* argv[]) {
 
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);
 				resultado->tempoEmMicros = tempoEmMicrosegundos(tInicial, tFinal);
+				resultado->tempoEmSegundos = tempoEmSegundos(tInicial, tFinal);
 
 				invalido = 0;
 				undExecucao = 1;
@@ -146,6 +156,7 @@ int main(int argc, char* argv[]) {
 
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);
 				resultado->tempoEmMicros = tempoEmMicrosegundos(tInicial, tFinal);
+				resultado->tempoEmSegundos = tempoEmSegundos(tInicial, tFinal);
 
 				invalido = 0;
 				processamento = "Subprocessos";
@@ -160,6 +171,7 @@ int main(int argc, char* argv[]) {
 				
 				resultado->tempoEmMilis = tempoEmMilisegundos(tInicial, tFinal);
 				resultado->tempoEmMicros = tempoEmMicrosegundos(tInicial, tFinal);
+				resultado->tempoEmSegundos = tempoEmSegundos(tInicial, tFinal);
 
 				invalido = 0;
 				processamento = "Threads";
