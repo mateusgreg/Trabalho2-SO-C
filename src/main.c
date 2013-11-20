@@ -76,7 +76,7 @@ void gerarArquivoCSV(Resultado* resultado, char* processamento, int undExecucao)
 	if (DEBUG) printf("\nGerando arquivo CSV...\n");
 
 	FILE* arquivo;
-	char* nome = "resultado.csv";
+	char* nome = "saida.csv";
 
 	if ( (arquivo = fopen(nome, "a+")) == NULL ) {
 		printf("\nErro ao abrir o arquivo!\n");
