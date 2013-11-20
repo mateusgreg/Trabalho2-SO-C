@@ -9,3 +9,7 @@
 int getMinimumInt();
 
 int getMaximumInt();
+
+unsigned long long int getMinimumUnsignedLongLongInt();
+
+unsigned long long int getMaximumUnsignedLongLongInt();

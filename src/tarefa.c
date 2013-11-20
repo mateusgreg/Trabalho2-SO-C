@@ -49,8 +49,11 @@ Resultado* executaTarefa(Tarefas* tarefas) {
 	resultado->mediaQuadradoPI = 0.0;
 	resultado->maiorElem = getMinimumInt();
 	resultado->menorElem = getMaximumInt();
-	resultado->maiorPI = getMinimumInt();
-	resultado->menorPI = getMaximumInt();
+	resultado->maiorPI = getMinimumUnsignedLongLongInt();
+	resultado->menorPI = getMaximumUnsignedLongLongInt();
+
+	printf("\n\nMaiorPI inicial: %llu\n", resultado->maiorPI);
+	printf("MenorPI inicial: %llu\n\n", resultado->menorPI);
 
 	for (i = tarefas->inicio; i <= tarefas->fim; i++){
 		resultadoFinal->PI[i] = produtoInternoEMaiorMenorElementoParcial(i, &(resultado->maiorElem), &(resultado->menorElem));
