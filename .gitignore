@@ -17,12 +17,10 @@
 *.out
 *.app
 main
-mainSubprocessos
 prog
 
 # Files
 *.out
-*.csv
 
 #  Text editors such as Emacs temporary files mark
 *~
